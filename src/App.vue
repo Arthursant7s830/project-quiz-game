@@ -22,11 +22,18 @@ export default {
     return {
       question: undefined,
       incorrectAnswers: undefined,
-      correctAnswer: undefined
+      correctAnswer: undefined, 
+      
     }
   },
 
-
+computed: {
+  answers() {
+    var answers = [...this.incorrectAnswers];
+    answers.push(this.correctAnswer);
+    return answers;
+  }
+},
   created() {
     this.axios.get('https://opentdb.com/api.php?amount=1&category=18').then((response) => {
       this.question = response.data.results[0].question;
