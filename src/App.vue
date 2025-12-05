@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { random } from 'core-js/es/number';
+// import { random } from 'core-js/es/number';
 
 
 export default {
@@ -31,10 +31,10 @@ export default {
 
 computed: {
   answers() {
-    var answers = JSON.parse( JSON.stringify(this.incorrectAnswers) );
+    var answers = [...this.incorrectAnswers];
     // eslint-disable-next-line no-unused-vars
-    answers.splice(Math.round(Math.random() * answers.length), 0, this.correctAnswer);
-    return answers;
+   answers.splice(Math.round( Math.random() * answers.length), 0, this.correctAnswer);
+   return answers;
   }
 },
   created() {
