@@ -1,42 +1,44 @@
 <template>
 
   <div>
-    <h1 v-html="this.question"></h1>
 
-    <input type="radio" name="options" value="True" />
-    <label>True</label><br />
+    <template v-if="question">
+      <h1 v-html="this.question"></h1>
 
-    <input type="radio" name="options" value="False" />
-    <label>False</label><br />
+      <template v-for="(answer, index) in this.answers" :key="index">
+
+        <input type="radio" name="options" value="answer" />
+        <label v-html="answer"></label><br />
+      </template>
+
+    </template>
 
     <button class="send" type="button">Send</button>
   </div>
 
+
 </template>
 
 <script>
-// import { random } from 'core-js/es/number';
-
-
 export default {
   name: 'App',
   data() {
     return {
-      question: undefined,
-      incorrectAnswers: undefined,
-      correctAnswer: undefined, 
-       
+      question: "",
+      incorrectAnswers: [],
+      correctAnswer: [],
+
     }
   },
 
-computed: {
-  answers() {
-    var answers = [...this.incorrectAnswers];
-    // eslint-disable-next-line no-unused-vars
-   answers.splice(Math.round( Math.random() * answers.length), 0, this.correctAnswer);
-   return answers;
-  }
-},
+  computed: {
+    answers() {
+      var answers = [...this.incorrectAnswers];
+      // eslint-disable-next-line no-unused-vars
+      answers.splice(Math.round(Math.random() * answers.length), 0, this.correctAnswer);
+      return answers;
+    }
+  },
   created() {
     this.axios.get('https://opentdb.com/api.php?amount=1&category=18').then((response) => {
       this.question = response.data.results[0].question;
