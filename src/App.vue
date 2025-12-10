@@ -7,11 +7,24 @@
 
       <template v-for="(answer, index) in this.answers" :key="index">
 
-        <input type="radio" name="options" :value="answer" v-model="this.chosen_answer"/>
+        <input :disabled="this.answerSubmitted" type="radio" name="options" :value="answer"
+          v-model="this.chosenAsnwer" />
         <label v-html="answer"></label><br />
       </template>
 
-      <button @click="this.submitAnswer()" class="send" type="button" >Send</button>
+      <button v-if="!this.answerSubmitted" @click="this.submitAnswer()" class="send" type="button">Send</button>
+
+      <section class="result" v-if="this.answerSubmitted">        
+        <template v-if="this.chosenAsnwer == this.correctAnswer">
+          <h4>&#9989; Congrulations, the answer "{{ this.correctAnswer }}" is correct.</h4>
+        </template>
+
+        <template v-else>
+          <h4>&#10060; I'm sorry, you picked the wrong answer. The correct is  "{{ this.correctAnswer }}".</h4>
+        </template>
+
+        <button @click="this.getNewQuestion()" class="send" type="button">Próxima pergunta</button>
+      </section>
 
     </template>
 
@@ -28,8 +41,8 @@ export default {
       question: "",
       incorrectAnswers: [],
       correctAnswer: [],
-      chosen_answer: undefined
-
+      chosenAsnwer: undefined,
+      answerSubmitted: false
     }
   },
 
@@ -42,19 +55,20 @@ export default {
     }
   },
 
-methods: {
-  submitAnswer() {
-    if (!this.chosen_answer) {
-      alert("Pick one of the options");
-    } else {
-      if(this.chosen_answer == this.correctAnswer) {
-        alert("You got it right!")
+  methods: {
+    submitAnswer() {
+      if (!this.chosenAsnwer) {
+        console.log("Pick one of the options");
       } else {
-        alert("You got it wrong")
+        this.answerSubmitted = true
+        if (this.chosenAsnwer == this.correctAnswer) {
+          console.log("You got it right!")
+        } else {
+          console.log("You got it wrong")
+        }
       }
     }
-  }
-},
+  },
 
   created() {
     this.axios.get('https://opentdb.com/api.php?amount=1&category=18').then((response) => {
