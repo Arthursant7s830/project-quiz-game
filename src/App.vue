@@ -3,7 +3,7 @@
   <div>
 
 
-<ScoreQuiz />
+    <ScoreQuiz :winCount="this.winCount" :loseCount="this.loseCount" />
 
     <template v-if="question">
       <h1 v-html="this.question"></h1>
@@ -11,14 +11,14 @@
       <template v-for="(answer, index) in this.answers" :key="index">
 
         <input :disabled="this.answerSubmitted" type="radio" name="options" :value="answer"
-          v-model="this.chosenAsnwer" />
+          v-model="this.chosenAnswer" />
         <label v-html="answer"></label><br />
       </template>
 
       <button v-if="!this.answerSubmitted" @click="this.submitAnswer()" class="send" type="button">Send</button>
 
       <section class="result" v-if="this.answerSubmitted">
-        <template v-if="this.chosenAsnwer == this.correctAnswer">
+        <template v-if="this.chosenAnswer == this.correctAnswer">
           <h4 v-html="'&#9989; Congrulations, the answer ' + this.correctAnswer + ' is correct.'">
 
           </h4>
@@ -53,8 +53,10 @@ export default {
       question: "",
       incorrectAnswers: [],
       correctAnswer: [],
-      chosenAsnwer: undefined,
-      answerSubmitted: false
+      chosenAnswer: undefined,
+      answerSubmitted: false,
+      winCount: 0,
+      loseCount: 0
     }
   },
 
@@ -69,14 +71,14 @@ export default {
 
   methods: {
     submitAnswer() {
-      if (!this.chosenAsnwer) {
+      if (!this.chosenAnswer) {
         console.log("Pick one of the options");
       } else {
         this.answerSubmitted = true
-        if (this.chosenAsnwer == this.correctAnswer) {
-          console.log("You got it right!")
+        if (this.chosenAnswer == this.correctAnswer) {
+          this.winCount++;
         } else {
-          console.log("You got it wrong")
+          this.loseCount++;
         }
       }
     },
@@ -84,7 +86,7 @@ export default {
     getNewQuestion() {
 
       this.answerSubmitted = false;
-      this.chosenAsnwer = undefined;
+      this.chosenAnswer = undefined;
       this.question = undefined;
 
       this.axios.get('https://opentdb.com/api.php?amount=1&category=18').then((response) => {
