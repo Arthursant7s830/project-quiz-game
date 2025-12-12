@@ -2,6 +2,9 @@
 
   <div>
 
+
+<ScoreQuiz />
+
     <template v-if="question">
       <h1 v-html="this.question"></h1>
 
@@ -33,12 +36,18 @@
 
   </div>
 
-
 </template>
 
 <script>
+import ScoreQuiz from './components/ScoreQuiz.vue';
+
+
 export default {
   name: 'App',
+  components: {
+    ScoreQuiz
+  },
+
   data() {
     return {
       question: "",
